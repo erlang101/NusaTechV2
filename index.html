@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>NusaTech - Sistem Manajemen Aset & Inventaris</title>
+    <!-- PWA Requirements -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 1. SPLASH SCREEN -->
+  <div id="splashScreen" class="splash-screen">
+    <div class="splash-content">
+      <div class="splash-logo-wrap">
+        <div class="splash-icon">
+          <i class="fa-solid fa-boxes-stacked"></i>
+        </div>
+      </div>
+      <h1>NusaTech</h1>
+      <p>Asset & Inventory Management</p>
+      
+      <div class="splash-cloud-badge">
+        <span class="splash-badge-dot"></span> Cloud Ecosystem
+      </div>
+
+      <small style="display:block; font-size:11px; color:#38bdf8; font-weight:700; margin-top:12px; letter-spacing:0.3px;">
+        Developed by Axentra Team • SMK Krian 1 Sidoarjo</small>
+      <div class="splash-loader"><span></span></div>
+    </div>
+  </div>
+
+
+  <!-- 2. ONBOARDING SCREEN -->
+  <div id="onboardingScreen" class="onboarding-screen hidden">
+    <div class="onboarding-top">
+      <button type="button" id="btnSkipOnboarding" class="btn-text" data-i18n="skip">Lewati</button>
+    </div>
+
+    <div class="onboarding-body">
+      <div class="onboarding-slide active" data-slide="0">
+        <div class="slide-illustration blue-theme">
+          <i class="fa-solid fa-layer-group"></i>
+        </div>
+        <h2>Sentralisasi Inventaris</h2>
+        <p>Pantau seluruh aset fisik perusahaan, status operasional, dan lokasi ruangan dalam satu sistem terpadu.</p>
+      </div>
+
+      <div class="onboarding-slide" data-slide="1">
+        <div class="slide-illustration purple-theme">
+          <i class="fa-solid fa-qrcode"></i>
+        </div>
+        <h2>Label QR & Barcode Mandiri</h2>
+        <p>Cetak label stiker inventaris fisik secara instan untuk verifikasi cepat menggunakan kamera ponsel.</p>
+      </div>
+
+      <div class="onboarding-slide" data-slide="2">
+        <div class="slide-illustration green-theme">
+          <i class="fa-solid fa-signature"></i>
+        </div>
+        <h2>Mutasi Sah & Digital Sign</h2>
+        <p>Lacak perpindahan antar-ruangan lengkap dengan bukti tanda tangan digital serah terima langsung di layar.</p>
+      </div>
+    </div>
+
+    <div class="onboarding-bottom">
+      <div class="dots-indicator">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+      <button type="button" id="btnNextOnboarding" class="btn-primary">
+        <span data-i18n="next">Lanjut</span> <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- 3. LANDING GATE SCREEN -->
+  <div id="landingGateScreen" class="landing-gate-screen hidden">
+    <div class="gate-hero">
+      <div class="gate-badge">
+        <i class="fa-solid fa-shield-halved"></i> Cloud Synced Enterprise</div>
+    </div>
+
+    <div class="gate-sheet">
+      <h2 data-i18n="gateTitle">NusaTech</h2>
+      <p data-i18n="gateSubtitle">Sistem Manajemen Aset & Inventaris Terpadu</p>
+      
+      <div class="gate-actions-row">
+        <button type="button" id="btnGateLogin" class="btn-primary-action">
+          <i class="fa-solid fa-arrow-right-to-bracket"></i> <span data-i18n="login">Masuk</span>
+        </button>
+        <button type="button" id="btnGateRegister" class="btn-outline-action">
+          <i class="fa-solid fa-user-plus"></i> <span data-i18n="register">Daftar</span>
+        </button>
+      </div>
+
+      <div class="gate-divider">
+        <span data-i18n="or">atau</span>
+      </div>
+
+      <button type="button" id="btnGateGuest" class="btn-guest">
+        <i class="fa-solid fa-compass"></i> <span data-i18n="guestMode">Mode Tamu</span>
+      </button>
+      <small class="gate-disclaimer">Eksplorasi instan tanpa perlu masuk ke akun cloud</small>
+    </div>
+  </div>
+
+  <!-- 4. MAIN APP -->
+  <div id="mainApp" class="main-app hidden">
+
+    <!-- DESKTOP SIDEBAR -->
+    <aside class="desktop-sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+        <div class="brand-text">
+          <span>PLATFORM</span>
+          <strong>NusaTech</strong>
+        </div>
+      </div>
+
+      <nav class="sidebar-menu">
+        <button type="button" class="nav-btn active" data-nav="home">
+          <i class="fa-solid fa-chart-pie"></i> <span data-i18n="navDashboard">Dashboard</span>
+        </button>
+        <button type="button" class="nav-btn" data-nav="aset">
+          <i class="fa-solid fa-box-archive"></i> <span data-i18n="navAssets">Data Aset</span>
+        </button>
+        <button type="button" class="nav-btn" data-nav="mutasi">
+          <i class="fa-solid fa-arrow-right-arrow-left"></i> <span data-i18n="navMutation">Mutasi</span>
+        </button>
+        <button type="button" class="nav-btn" data-nav="servis">
+          <i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="navService">Maintenance</span>
+        </button>
+        <button type="button" class="nav-btn" data-nav="menu">
+          <i class="fa-solid fa-sliders"></i> <span data-i18n="navSettings">Pengaturan</span>
+        </button>
+      </nav>
+
+      <button type="button" id="btnSidebarLogout" class="btn-sidebar-logout">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i> <span data-i18n="logout">Keluar</span>
+      </button>
+    </aside>
+
+    <div class="content-wrapper">
+      
+      <!-- TOPBAR -->
+      <header class="app-topbar">
+        <div class="user-greeting-box clickable-profile" id="topbarUserProfileBtn">
+          <div class="user-avatar-img-wrap" id="headerAvatarContainer">
+            <span>A</span>
+          </div>
+          <div class="user-info">
+            <small data-i18n="welcome">Selamat Datang,</small>
+            <strong id="headerUserName">Axentra</strong>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <div class="cloud-status">
+            <span class="pulse-dot"></span>
+            <span id="cloudStatusText">Supabase Cloud</span>
+          </div>
+          <button type="button" id="btnTopbarSettings" class="icon-action-btn">
+            <i class="fa-solid fa-gear"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- TAB 1: DASHBOARD -->
+      <div id="tabViewHome" class="tab-view active view-container">
+        
+        <!-- Service Reminder Alert -->
+        <div id="serviceReminderAlert" class="reminder-alert-card hidden">
+          <div class="reminder-icon-box">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          </div>
+          <div class="reminder-content-box">
+            <div class="reminder-title-row">
+              <h4 id="reminderCountText">Perlu Perawatan Rutin</h4>
+              <span class="reminder-badge" data-i18n="reminderBadge">Penting</span>
+            </div>
+            <p id="reminderDescText" data-i18n="reminderDesc">Ada unit yang jadwal servis berkala sudah tiba atau jatuh tempo dalam minggu ini.</p>
+            <div class="reminder-items-tags" id="reminderItemsList"></div>
+          </div>
+        </div>
+
+        <div class="desktop-dashboard-grid">
+          <div class="dash-col-left">
+            <div class="hero-card">
+              <div class="hero-top">
+                <div>
+                  <span class="hero-sub" data-i18n="totalValueSub">Estimasi Nilai Keseluruhan</span>
+                  <h2 id="cardAssetValue">Rp 0</h2>
+                </div>
+                <div class="hero-badge-icon"><i class="fa-solid fa-coins"></i></div>
+              </div>
+              <div class="hero-bottom">
+                <div class="hero-metric">
+                  <span data-i18n="metricUnits">Total Unit</span>
+                  <strong id="cardTotalUnits">0</strong>
+                </div>
+                <div class="hero-sep"></div>
+                <div class="hero-metric">
+                  <span data-i18n="metricTypes">Jenis Barang</span>
+                  <strong id="cardTotalTypes">0</strong>
+                </div>
+                <div class="hero-sep"></div>
+                <div class="hero-metric">
+                  <span data-i18n="metricRooms">Ruangan</span>
+                  <strong id="cardTotalRooms">0</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="section-label">
+              <h3 data-i18n="quickMenu">Menu Cepat</h3>
+            </div>
+            <div class="quick-grid">
+              <button type="button" class="quick-btn" id="qaScan">
+                <div class="icon-wrap scan-bg"><i class="fa-solid fa-qrcode"></i></div>
+                <span data-i18n="qaScan">Scan QR</span>
+              </button>
+              <button type="button" class="quick-btn" id="qaAdd">
+                <div class="icon-wrap add-bg"><i class="fa-solid fa-box-open"></i></div>
+                <span data-i18n="qaAdd">Tambah Aset</span>
+              </button>
+              <button type="button" class="quick-btn" id="qaMutate">
+                <div class="icon-wrap mutate-bg"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+                <span data-i18n="qaMutate">Mutasi</span>
+              </button>
+              <button type="button" class="quick-btn" id="qaReport">
+                <div class="icon-wrap report-bg"><i class="fa-solid fa-file-invoice"></i></div>
+                <span data-i18n="qaReport">Laporan</span>
+              </button>
+            </div>
+
+            <div class="section-label">
+              <h3 data-i18n="fieldCondition">Kondisi Aset Lapangan</h3>
+            </div>
+            <div class="condition-card">
+              <div class="cond-head">
+                <span class="cond-tag tag-good"><i class="fa-solid fa-circle-check"></i> <span data-i18n="statusGood">Siap Pakai (Baik)</span></span>
+                <strong id="condGoodText">0 Unit</strong>
+              </div>
+              <div class="progress-track"><div class="progress-fill fill-good" id="barGood"></div></div>
+
+              <div class="cond-head" style="margin-top: 14px;">
+                <span class="cond-tag tag-warn"><i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="statusMinor">Rusak Ringan</span></span>
+                <strong id="condMinorText">0 Unit</strong>
+              </div>
+              <div class="progress-track"><div class="progress-fill fill-warn" id="barMinor"></div></div>
+
+              <div class="cond-head" style="margin-top: 14px;">
+                <span class="cond-tag tag-danger"><i class="fa-solid fa-circle-xmark"></i> <span data-i18n="statusMajor">Rusak Berat</span></span>
+                <strong id="condMajorText">0 Unit</strong>
+              </div>
+              <div class="progress-track"><div class="progress-fill fill-danger" id="barMajor"></div></div>
+            </div>
+          </div>
+
+          <div class="dash-col-right">
+            <div class="section-label mt-0">
+              <h3 data-i18n="roomSpread">Sebaran Ruangan</h3>
+            </div>
+            <div class="room-tiles-grid" id="roomTilesGrid"></div>
+
+            <div class="section-label flex-between" style="margin-top: 22px;">
+              <h3 data-i18n="recentActivity">Aktivitas Terakhir</h3>
+              <button type="button" class="link-btn" id="btnSeeAllAssets" data-i18n="viewAll">Buka Semua Aset</button>
+            </div>
+            <div class="activity-feed" id="homeActivityFeed"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: DATA ASET -->
+      <div id="tabViewAset" class="tab-view hidden view-container">
+        <div class="asset-header-layout">
+          <div>
+            <h2 data-i18n="assetsTitle">Data Inventaris</h2>
+            <p data-i18n="assetsDesc">Kelola seluruh aset, informasi spesifikasi, dan stiker QR</p>
+          </div>
+          <div class="header-actions-group">
+            <button type="button" class="btn-primary btn-main-add" id="btnAsetScreenAdd">
+              <i class="fa-solid fa-plus"></i> <span data-i18n="addAsset">Tambah Aset Baru</span>
+            </button>
+            <div class="sub-actions-row">
+              <button type="button" class="btn-sm-action outline flex-1" onclick="printBatchQrLabels()">
+                <i class="fa-solid fa-table-cells-large"></i> <span data-i18n="batchQr">Cetak Semua QR</span>
+              </button>
+              <label class="btn-sm-action outline flex-1" style="margin-bottom:0; cursor:pointer;">
+                <i class="fa-solid fa-file-import"></i> <span data-i18n="import">Impor</span>
+                <input type="file" id="inputImportCsv" accept=".csv" style="display:none;">
+              </label>
+              <button type="button" class="btn-sm-action outline flex-1" onclick="openExportReportModal()">
+                <i class="fa-solid fa-file-export"></i> <span data-i18n="export">Ekspor</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="search-input-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="inputSearchAssets" placeholder="Cari nama barang, kode, ruangan..." data-i18n-ph="searchAssetsPh">
+          <select id="selectSortAssets" style="border:none; background:transparent; font-size:12px; font-weight:700; color:var(--text-muted); outline:none; cursor:pointer;">
+            <option value="default" data-i18n="sortDefault">⇅ Urutkan: Default</option>
+            <option value="name-asc" data-i18n="sortNameAsc">Nama (A - Z)</option>
+            <option value="name-desc" data-i18n="sortNameDesc">Nama (Z - A)</option>
+            <option value="stock-desc" data-i18n="sortStockDesc">Stok Terbanyak</option>
+            <option value="stock-asc" data-i18n="sortStockAsc">Stok Tersedikit</option>
+            <option value="price-desc" data-i18n="sortPriceDesc">Harga Tertinggi</option>
+            <option value="price-asc" data-i18n="sortPriceAsc">Harga Terendah</option>
+          </select>
+        </div>
+
+        <div class="filter-chips-scroll">
+          <button type="button" class="chip active" data-filter="all" data-i18n="chipAll">Semua</button>
+          <button type="button" class="chip" data-filter="Baik" data-i18n="chipGood">Baik</button>
+          <button type="button" class="chip" data-filter="Rusak Ringan" data-i18n="chipMinor">Rusak Ringan</button>
+          <button type="button" class="chip" data-filter="Rusak Berat" data-i18n="chipMajor">Rusak Berat</button>
+        </div>
+
+        <!-- Mobile List -->
+        <div class="mobile-items-list" id="mobileItemsContainer"></div>
+
+        <!-- Desktop Table -->
+        <div class="desktop-table-card">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width: 40px;">Pilih</th>
+                <th style="width: 55px;" data-i18n="thPhoto">Foto</th>
+                <th data-i18n="thName">Nama Barang</th>
+                <th data-i18n="thCode">Kode Aset</th>
+                <th data-i18n="thCategory">Kategori</th>
+                <th data-i18n="thRoom">Ruangan</th>
+                <th data-i18n="thStock">Stok Unit</th>
+                <th data-i18n="thCondition">Kondisi Fisik</th>
+                <th style="text-align: right; width: 120px;" data-i18n="thAction">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="desktopTableBody"></tbody>
+          </table>
+        </div>
+
+        <div id="assetsEmptyState" class="empty-state-box hidden">
+          <i class="fa-solid fa-box-open"></i>
+          <h4 data-i18n="emptyAssetsTitle">Tidak ada aset ditemukan</h4>
+          <p data-i18n="emptyAssetsDesc">Cobalah kata kunci lain atau daftarkan aset baru sekarang</p>
+        </div>
+      </div>
+
+      <!-- TAB 3: MUTASI -->
+      <div id="tabViewMutasi" class="tab-view hidden view-container">
+        <div class="screen-header">
+          <div>
+            <h2 data-i18n="mutationTitle">Mutasi Barang</h2>
+            <p data-i18n="mutationDesc">Lacak perpindahan aset fisik antar-ruangan</p>
+          </div>
+          <button type="button" class="btn-primary" id="btnOpenMutasiModal">
+            <i class="fa-solid fa-arrow-right-arrow-left"></i> <span data-i18n="recordMutation">Catat Mutasi</span>
+          </button>
+        </div>
+
+        <div class="search-input-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="inputSearchMutations" placeholder="Cari log perpindahan barang..." data-i18n-ph="searchMutationsPh">
+        </div>
+
+        <div class="mutation-feed" id="mutationLogsContainer"></div>
+
+        <div id="mutationsEmptyState" class="empty-state-box hidden">
+          <i class="fa-solid fa-truck-ramp-box"></i>
+          <h4 data-i18n="emptyMutationsTitle">Belum Ada Riwayat Mutasi</h4>
+          <p data-i18n="emptyMutationsDesc">Aset yang dipindahkan antar-ruangan akan tercatat otomatis di sini.</p>
+        </div>
+      </div>
+
+      <!-- TAB 4: SERVIS -->
+      <div id="tabViewServis" class="tab-view hidden view-container">
+        <div class="screen-header">
+          <div>
+            <h2 data-i18n="serviceTitle">Maintenance & Servis</h2>
+            <p data-i18n="serviceDesc">Pantau proses pengerjaan dan biaya perbaikan aset</p>
+          </div>
+          <button type="button" class="btn-primary" id="btnOpenServiceModal">
+            <i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="recordService">Catat Servis</span>
+          </button>
+        </div>
+
+        <div class="search-input-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="inputSearchServices" placeholder="Cari data perbaikan teknisi..." data-i18n-ph="searchServicesPh">
+        </div>
+
+        <div class="filter-chips-scroll">
+          <button type="button" class="chip service-filter-chip active" data-sfilter="all" data-i18n="chipAllStatus">Semua Status</button>
+          <button type="button" class="chip service-filter-chip" data-sfilter="Dalam Antrean" data-i18n="statusQueue">Dalam Antrean</button>
+          <button type="button" class="chip service-filter-chip" data-sfilter="Sedang Dikerjakan" data-i18n="statusProgressShort">Dikerjakan</button>
+          <button type="button" class="chip service-filter-chip" data-sfilter="Selesai" data-i18n="statusDoneShort">Selesai</button>
+        </div>
+
+        <div class="service-feed" id="serviceLogsContainer"></div>
+
+        <div id="servicesEmptyState" class="empty-state-box hidden">
+          <i class="fa-solid fa-toolbox"></i>
+          <h4 data-i18n="emptyServicesTitle">Tidak Ada Catatan Servis</h4>
+          <p data-i18n="emptyServicesDesc">Aset yang dicatat dalam perbaikan teknisi akan tampil di sini.</p>
+        </div>
+      </div>
+
+      <!-- TAB 5: PENGATURAN -->
+      <div id="tabViewMenu" class="tab-view hidden view-container">
+        <div class="profile-hero-card">
+          <div class="profile-avatar-large-wrap">
+            <div class="profile-avatar-circle" id="profileCardAvatar"><span>A</span></div>
+            <button type="button" class="btn-avatar-upload" id="btnTriggerAvatarActions">
+              <i class="fa-solid fa-camera"></i>
+            </button>
+          </div>
+          <div class="profile-meta-info">
+            <div class="profile-name-row">
+              <strong id="profileDisplayName">Axentra</strong>
+              <button type="button" class="btn-icon-subtle" id="btnEditProfileName"><i class="fa-solid fa-pen"></i></button>
+            </div>
+            <small id="profileDisplayRole">PT NusaTech Digital Indonesia</small>
+            <span class="user-email-tag" id="profileDisplayEmail">admin@nusatech.co.id</span>
+          </div>
+        </div>
+
+        <div class="settings-grouped-container">
+          <div class="settings-group-card">
+            <span class="group-header-label"><i class="fa-solid fa-palette"></i> <span data-i18n="groupDisplay">Tampilan Antarmuka</span></span>
+            <div class="setting-row">
+              <div>
+                <strong data-i18n="themeMode">Tema Aplikasi</strong>
+                <small data-i18n="themeDesc">Pilih mode tampilan gelap, terang, atau otomatis</small>
+              </div>
+              <div class="segmented-control">
+                <button type="button" class="seg-btn" data-theme-val="light" data-i18n="themeLight">Terang</button>
+                <button type="button" class="seg-btn" data-theme-val="dark" data-i18n="themeDark">Gelap</button>
+                <button type="button" class="seg-btn active" data-theme-val="auto">Auto</button>
+              </div>
+            </div>
+            <div class="setting-row">
+              <div>
+                <strong data-i18n="appLanguage">Bahasa Sistem</strong>
+                <small data-i18n="langDesc">Pilih bahasa pengantar antarmuka aplikasi</small>
+              </div>
+              <div class="segmented-control">
+                <button type="button" class="seg-btn active" data-lang-val="id">ID</button>
+                <button type="button" class="seg-btn" data-lang-val="en">EN</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-group-card">
+            <span class="group-header-label"><i class="fa-solid fa-clock-rotate-left"></i> <span data-i18n="auditModalTitle">Riwayat Aktivitas Sistem</span></span>
+            <div class="setting-row">
+              <div>
+                <strong data-i18n="auditModalTitle">Audit Trail Operasional</strong>
+                <small data-i18n="auditModalDesc">Catatan kronologis tindakan staf dan perubahan data aset</small>
+              </div>
+              <button type="button" class="btn-subtle-neutral" id="btnViewAllLogs">
+                <i class="fa-solid fa-clock-rotate-left"></i> <span data-i18n="viewAllLogs">Lihat Semua</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="settings-group-card">
+            <span class="group-header-label"><i class="fa-solid fa-database"></i> <span data-i18n="groupData">Manajemen Database</span></span>
+            <div class="setting-row">
+              <div>
+                <strong data-i18n="backupTitle">Cadangkan Data (JSON)</strong>
+                <small data-i18n="backupDesc">Unduh seluruh aset, mutasi, & servis ke file JSON</small>
+              </div>
+              <button type="button" class="btn-subtle-neutral" id="btnBackupDatabase">
+                <i class="fa-solid fa-download"></i> <span data-i18n="backupBtn">Cadangkan</span>
+              </button>
+            </div>
+            <div class="setting-row">
+              <div>
+                <strong data-i18n="restoreTitle">Pulihkan Data (JSON)</strong>
+                <small data-i18n="restoreDesc">Unggah file cadangan untuk memulihkan database</small>
+              </div>
+              <label class="btn-subtle-neutral clickable-label">
+                <i class="fa-solid fa-upload"></i> <span data-i18n="restoreBtn">Pulihkan</span>
+                <input type="file" id="inputRestoreDatabase" accept=".json" style="display:none;">
+              </label>
+            </div>
+            <div class="setting-row">
+              <div>
+                <strong data-i18n="resetSimTitle">Muat Ulang Data Simulasi</strong>
+                <small data-i18n="resetSimDesc">Kembalikan ke data awal bawaan NusaTech</small>
+              </div>
+              <button type="button" class="btn-subtle-danger" id="btnSeedDefaultData">
+                <i class="fa-solid fa-rotate"></i> <span data-i18n="resetData">Reset Data</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="settings-group-card">
+            <span class="group-header-label"><i class="fa-solid fa-shield-halved"></i> <span data-i18n="groupSession">Sesi & Akun</span></span>
+            <div class="setting-row">
+              <div>
+                <strong data-i18n="switchAccount">Ganti Akun Staf</strong>
+                <small data-i18n="switchAccountDesc">Masuk menggunakan profil pengguna lain</small>
+              </div>
+              <button type="button" class="btn-subtle-neutral" id="btnSwitchAccount">
+                <i class="fa-solid fa-users"></i> <span data-i18n="switchBtn">Ganti</span>
+              </button>
+            </div>
+            <div class="setting-row">
+              <div>
+                <strong data-i18n="logoutTitle">Keluar dari Aplikasi</strong>
+                <small data-i18n="logoutDesc">Akhiri sesi aktif di perangkat ini</small>
+              </div>
+              <button type="button" class="btn-subtle-danger" id="btnLogout">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> <span data-i18n="logout">Keluar</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <p class="settings-app-credit">NusaTech • Dikelola oleh <strong>PT NusaTech Digital Indonesia</strong></p>
+      </div>
+
+    </div><!-- End content-wrapper -->
+
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+      <button type="button" class="b-nav-item active" data-nav="home">
+        <i class="fa-solid fa-house"></i>
+        <span data-i18n="navDashboard">Dashboard</span>
+      </button>
+      <button type="button" class="b-nav-item" data-nav="aset">
+        <i class="fa-solid fa-boxes-stacked"></i>
+        <span data-i18n="navAssets">Data Aset</span>
+      </button>
+      <button type="button" class="b-nav-item" data-nav="mutasi">
+        <i class="fa-solid fa-arrow-right-arrow-left"></i>
+        <span data-i18n="navMutation">Mutasi</span>
+      </button>
+      <button type="button" class="b-nav-item" data-nav="servis">
+        <i class="fa-solid fa-screwdriver-wrench"></i>
+        <span data-i18n="navService">Maintenance</span>
+      </button>
+      <button type="button" class="b-nav-item" data-nav="menu">
+        <i class="fa-solid fa-sliders"></i>
+        <span data-i18n="navSettings">Pengaturan</span>
+      </button>
+    </nav>
+  </div><!-- End mainApp -->
+
+  <!-- ============================================================
+       MODALS
+       ============================================================ -->
+
+  <!-- AUTH MODAL -->
+  <div id="authModal" class="app-modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-container">
+      <div class="sheet-drag-handle"></div>
+      <button type="button" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+
+      <div class="auth-header">
+        <div class="auth-icon-mini"><i class="fa-solid fa-arrow-right-to-bracket" id="authHeaderIcon"></i></div>
+        <h2 id="authTitle" data-i18n="login">Masuk Sistem</h2>
+        <p id="authSubtitle">Akses database cloud inventaris PT NusaTech</p>
+      </div>
+
+      <div id="authAlert" class="auth-alert hidden"></div>
+
+      <form id="authForm">
+        <div class="input-field hidden" id="fieldUsername">
+          <i class="fa-solid fa-user"></i>
+          <input type="text" id="inputUsername" placeholder="Nama Lengkap Staf" data-i18n-ph="userNameLabel">
+        </div>
+
+        <div class="input-field">
+          <i class="fa-solid fa-envelope"></i>
+          <input type="email" id="inputEmail" placeholder="nama@nusatech.co.id" required>
+        </div>
+
+        <div class="input-field" id="fieldPassword">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" id="inputPassword" placeholder="Kata Sandi (minimal 6 karakter)" required>
+        </div>
+
+        <button type="submit" class="btn-primary btn-block">
+          <span id="authSubmitText" data-i18n="login">Masuk Sekarang</span>
+        </button>
+
+        <div class="gate-divider my-3">
+          <span data-i18n="or">atau</span>
+        </div>
+
+        <button type="button" class="btn-google-action" id="btnGoogleAuth">
+          <svg class="google-icon" viewBox="0 0 48 48">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+          <span>Lanjutkan dengan Google</span>
+        </button>
+
+        <div class="auth-footer-toggle">
+          <span id="authToggleText">Belum punya akun?</span>
+          <button type="button" id="btnSwitchAuthMode" class="btn-link">Daftar Akun Baru</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SWITCH ACCOUNT MODAL -->
+  <div id="switchAccountModal" class="app-modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-container switch-account-sheet">
+      <div class="sheet-drag-handle"></div>
+      <button type="button" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+
+      <div class="modal-title-box">
+        <h3 data-i18n="switchAccount">Ganti Akun Staf</h3>
+        <p data-i18n="switchAccountDesc">Masuk menggunakan profil pengguna lain</p>
+      </div>
+
+      <div class="switch-accounts-list" id="switchAccountsList"></div>
+
+      <div style="margin-top: 18px;">
+        <button type="button" class="btn-add-account-action" id="btnAddNewAccountTrigger">
+          <i class="fa-solid fa-user-plus"></i> <span data-i18n="register">Daftar Akun Baru</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ITEM FORM MODAL (TAMBAH / EDIT ASET) -->
+  <div id="itemFormModal" class="app-modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-container">
+      <div class="sheet-drag-handle"></div>
+      <button type="button" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+
+      <div class="modal-title-box">
+        <h3 id="itemFormTitle" data-i18n="addItemModalTitle">Tambah Aset Baru</h3>
+        <p data-i18n="addItemModalDesc">Lengkapi informasi dan foto fisik inventaris</p>
+      </div>
+
+      <form id="formInventoryItem">
+        <input type="hidden" id="editItemId">
+        <input type="hidden" id="itemImageBase64">
+
+        <!-- Foto Barang -->
+        <div class="form-group">
+          <label data-i18n="itemPhoto">Foto Barang</label>
+          <div class="item-photo-upload-container">
+            <div class="item-photo-preview-box">
+              <img id="imgItemPreview" src="" alt="Pratinjau Foto" class="hidden">
+              <div id="itemPhotoPlaceholder" class="photo-placeholder">
+                <i class="fa-solid fa-camera"></i>
+                <span>Foto Fisik</span>
+              </div>
+            </div>
+            <div class="item-photo-buttons">
+              <label class="btn-sm-action">
+                <i class="fa-solid fa-camera"></i> <span data-i18n="takePhoto">Ambil Foto</span>
+                <input type="file" id="inputItemPhotoCamera" accept="image/*" capture="environment" style="display:none;">
+              </label>
+              <label class="btn-sm-action outline">
+                <i class="fa-solid fa-image"></i> <span data-i18n="fromGallery">Dari Galeri</span>
+                <input type="file" id="inputItemPhoto" accept="image/*" style="display:none;">
+              </label>
+              <button type="button" id="btnRemoveItemPhoto" class="btn-sm-action danger-outline hidden">
+                <i class="fa-solid fa-trash-can"></i> <span data-i18n="removePhoto">Hapus Foto</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kolom Wajib Ujian: Nama & Kode -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="inputItemName" data-i18n="formItemName">Nama Barang / Perangkat *</label>
+            <input type="text" id="inputItemName" placeholder="Contoh: Laptop ThinkPad T14" required>
+          </div>
+          <div class="form-group">
+            <label for="inputItemCode" data-i18n="formItemCode">Kode Aset *</label>
+            <input type="text" id="inputItemCode" placeholder="NST-005" required>
+          </div>
+        </div>
+
+        <!-- Kategori & Ruangan -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="selectItemCategory" data-i18n="formItemCategory">Kategori *</label>
+            <select id="selectItemCategory" required>
+              <option value="Hardware IT">Hardware IT</option>
+              <option value="Network & Server">Network & Server</option>
+              <option value="Furniture Kantor">Furniture Kantor</option>
+              <option value="Peralatan Studio/Kreatif">Peralatan Studio/Kreatif</option>
+              <option value="Elektronik Operasional">Elektronik Operasional</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="inputItemRoom" data-i18n="formItemRoom">Ruangan / Lokasi *</label>
+            <input type="text" id="inputItemRoom" placeholder="Contoh: Server Room" required>
+          </div>
+        </div>
+
+        <!-- Stok & Satuan (Wajib Ujian) -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="inputItemQty" data-i18n="formItemQty">Jumlah Unit (Stok) *</label>
+            <input type="number" id="inputItemQty" min="1" value="1" required>
+          </div>
+          <div class="form-group">
+            <label for="selectItemUnit" data-i18n="formItemUnit">Satuan *</label>
+            <select id="selectItemUnit" required>
+              <option value="Unit">Unit</option>
+              <option value="Pcs">Pcs</option>
+              <option value="Set">Set</option>
+              <option value="Buah">Buah</option>
+              <option value="Box">Box</option>
+              <option value="Rol">Rol</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Harga & Supplier (Dipindah ke Form Utama) -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="inputItemPrice" data-i18n="formItemPrice">Harga Beli / Unit (Rp) *</label>
+            <input type="number" id="inputItemPrice" min="0" placeholder="0" required>
+          </div>
+          <div class="form-group">
+            <label for="inputItemSupplier" data-i18n="formItemSupplier">Nama Supplier / Vendor *</label>
+            <input type="text" id="inputItemSupplier" placeholder="Contoh: PT Sinar Teknologi" required>
+          </div>
+        </div>
+
+        <!-- Kondisi Fisik -->
+        <div class="form-group">
+          <label for="selectItemCondition" data-i18n="formItemCondition">Kondisi Fisik *</label>
+          <select id="selectItemCondition" required>
+            <option value="Baik">Baik (Siap Pakai)</option>
+            <option value="Rusak Ringan">Rusak Ringan</option>
+            <option value="Rusak Berat">Rusak Berat</option>
+          </select>
+        </div>
+
+        <!-- Informasi Tambahan (Opsional) -->
+        <button type="button" id="btnToggleAdvancedFields" class="btn-toggle-accordion">
+          <span><i class="fa-solid fa-sliders"></i> <span>Spesifikasi & Depresiasi (Opsional)</span></span>
+          <i class="fa-solid fa-chevron-down" id="iconAdvancedArrow"></i>
+        </button>
+
+        <div id="advancedFieldsContainer" class="advanced-fields-box hidden">
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="inputPurchaseDate" data-i18n="formPurchaseDate">Tanggal Pembelian</label>
+              <input type="date" id="inputPurchaseDate">
+            </div>
+            <div class="form-group">
+              <label for="inputUsefulLife" data-i18n="formUsefulLife">Masa Pakai (Tahun)</label>
+              <select id="inputUsefulLife">
+                <option value="4" data-i18n="lifeOption4">4 Tahun (Perangkat IT/Elektronik)</option>
+                <option value="8" data-i18n="lifeOption8">8 Tahun (Furniture & Kantor)</option>
+                <option value="5" data-i18n="lifeOption5">5 Tahun (Umum)</option>
+                <option value="10" data-i18n="lifeOption10">10 Tahun (Mesin/Kendaraan)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="assetNextServiceDate" data-i18n="formNextService">Jadwal Servis Berkala</label>
+            <input type="date" id="assetNextServiceDate">
+          </div>
+
+          <div class="form-group">
+            <label for="inputItemNotes" data-i18n="formItemNotes">Catatan Spesifikasi</label>
+            <textarea id="inputItemNotes" rows="2" placeholder="Nomor seri, spesifikasi RAM/SSD, warna, dll..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer-actions">
+          <button type="button" class="btn-outline-action" id="btnCancelItemForm" data-i18n="cancel">Batal</button>
+          <button type="submit" class="btn-primary-action" data-i18n="saveAsset">Simpan Aset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MUTATION MODAL (DENGAN TTD DIGITAL) -->
+  <div id="mutationFormModal" class="app-modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-container">
+      <div class="sheet-drag-handle"></div>
+      <button type="button" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+
+      <div class="modal-title-box">
+        <h3 data-i18n="mutateModalTitle">Pindahkan Aset (Mutasi)</h3>
+        <p data-i18n="mutateModalDesc">Pindahkan unit kerja antar-ruangan operasional</p>
+      </div>
+
+      <form id="formMutation">
+        <input type="hidden" id="selectedMutateItemId">
+
+        <div class="form-group">
+          <label data-i18n="mutateSelectLabel">Pilih Aset yang Ingin Dipindah *</label>
+          <div class="picker-trigger-box" id="btnTriggerItemPicker">
+            <span id="lblSelectedItemName" class="placeholder-text" data-i18n="mutatePlaceholder">Pilih barang inventaris...</span>
+            <i class="fa-solid fa-chevron-right"></i>
+          </div>
+        </div>
+
+        <div class="mutation-stock-badge">
+          <span><span data-i18n="sourceRoom">Ruangan Asal</span>: <strong id="lblMutateSourceRoom">-</strong></span>
+          <span><span data-i18n="availableStock">Tersedia</span>: <strong id="lblMutateSourceQty">0</strong></span>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="inputMutateQty" data-i18n="transferQty">Jumlah Dipindahkan *</label>
+            <input type="number" id="inputMutateQty" min="1" value="1" required>
+          </div>
+          <div class="form-group">
+            <label for="inputMutateDestRoom" data-i18n="destRoom">Ruangan Tujuan *</label>
+            <input type="text" id="inputMutateDestRoom" placeholder="Contoh: Dev Studio" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="inputMutateNotes" data-i18n="transferReason">Alasan / Keterangan Mutasi</label>
+          <textarea id="inputMutateNotes" rows="2" placeholder="Contoh: Deployment kebutuhan proyek klien..."></textarea>
+        </div>
+
+        <!-- AREA KANVAS TANDA TANGAN DIGITAL -->
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-main); margin-bottom: 0;">
+              <i class="fa-solid fa-signature" style="color: var(--primary); margin-right: 4px;"></i>
+              <span data-i18n="signatureLabel">Tanda Tangan Penerima / Petugas *</span>
+            </label>
+            <button type="button" id="btnClearSignature" class="btn-text" style="font-size: 11px; color: #ef4444; padding: 0; background: none; border: none; font-weight: 700; cursor: pointer;">
+              <i class="fa-solid fa-rotate-left"></i> <span data-i18n="clearSignature">Ulangi</span>
+            </button>
+          </div>
+          <div style="border: 1.5px dashed var(--border-color); border-radius: 12px; background: #ffffff; overflow: hidden; position: relative;">
+            <canvas id="signatureCanvas" style="width: 100%; height: 110px; display: block; touch-action: none; cursor: crosshair;"></canvas>
+            <span id="signatureHintText" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 11px; color: var(--text-muted); pointer-events: none; opacity: 0.6;" data-i18n="signatureHint">
+              Goreskan tanda tangan di sini
+            </span>
+          </div>
+          <input type="hidden" id="inputSignatureBase64">
+        </div>
+
+        <div class="modal-footer-actions">
+          <button type="button" class="btn-outline-action" id="btnCancelMutation" data-i18n="cancel">Batal</button>
+          <button type="submit" class="btn-primary-action" data-i18n="processTransfer">Proses Mutasi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SERVICE MODAL -->
+  <div id="serviceFormModal" class="app-modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-container">
+      <div class="sheet-drag-handle"></div>
+      <button type="button" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+
+      <div class="modal-title-box">
+        <h3 data-i18n="serviceModalTitle">Catat Servis / Perbaikan</h3>
+        <p data-i18n="serviceModalDesc">Lacak penanganan kendala hardware & suku cadang</p>
+      </div>
+
+      <form id="formService">
+        <input type="hidden" id="selectedServiceItemId">
+
+        <div class="form-group">
+          <label data-i18n="serviceSelectLabel">Pilih Aset yang Diservis *</label>
+          <div class="picker-trigger-box" id="btnTriggerServiceItemPicker">
+            <span id="lblSelectedServiceItemName" class="placeholder-text" data-i18n="servicePlaceholder">Pilih aset yang rusak...</span>
+            <i class="fa-solid fa-chevron-right"></i>
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="inputServiceTech" data-i18n="serviceTech">Nama Teknisi / Vendor *</label>
+            <input type="text" id="inputServiceTech" value="Tim IT Support" required>
+          </div>
+          <div class="form-group">
+            <label for="selectServiceStatus" data-i18n="initialStatus">Status Awal *</label>
+            <select id="selectServiceStatus" required>
+              <option value="Sedang Dikerjakan" data-i18n="statusProgress">Sedang Dikerjakan</option>
+              <option value="Dalam Antrean" data-i18n="statusQueue">Dalam Antrean</option>
+              <option value="Selesai" data-i18n="statusDone">Selesai & Siap Pakai</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="inputServiceCost" data-i18n="repairCost">Estimasi / Biaya Perbaikan (Rp)</label>
+          <input type="number" id="inputServiceCost" min="0" placeholder="0">
+        </div>
+
+        <div class="form-group">
+          <label for="inputServiceNotes" data-i18n="issueDesc">Deskripsi Kendala & Komponen Diganti *</label>
+          <textarea id="inputServiceNotes" rows="2" placeholder="Contoh: Penggantian pasta thermal dan perbaikan kipas pendingin..." required></textarea>
+        </div>
+
+        <div class="modal-footer-actions">
+          <button type="button" class="btn-outline-action" id="btnCancelService" data-i18n="cancel">Batal</button>
+          <button type="submit" class="btn-primary-action" data-i18n="saveService">Simpan Servis</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SERVICE STATUS CHANGE MODAL -->
+  <div id="serviceStatusModal" class="app-modal sub-modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-container status-change-sheet">
+      <div class="sheet-drag-handle"></div>
+      <button type="button" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+
+      <div class="modal-title-box">
+        <h3 data-i18n="updateServiceStatus">Perbarui Status Servis</h3>
+        <p id="lblStatusChangeItemTitle">-</p>
+      </div>
+
+      <div class="status-options-list">
+        <div class="status-option-card" onclick="applyServiceStatusChange('Dalam Antrean')">
+          <div class="status-dot queue-dot"></div>
+          <div class="status-opt-info">
+            <strong data-i18n="statusQueue">Dalam Antrean</strong>
+            <small data-i18n="statusQueueDesc">Menunggu pengecekan teknisi</small>
+          </div>
+        </div>
+        <div class="status-option-card" onclick="applyServiceStatusChange('Sedang Dikerjakan')">
+          <div class="status-dot progress-dot"></div>
+          <div class="status-opt-info">
+            <strong data-i18n="statusProgress">Sedang Dikerjakan</strong>
+            <small data-i18n="statusProgressDesc">Aset sedang dalam proses perbaikan fisik</small>
+          </div>
+        </div>
+        <div class="status-option-card" onclick="applyServiceStatusChange('Selesai')">
+          <div class="status-dot done-dot"></div>
+          <div class="status-opt-info">
+            <strong data-i18n="statusDone">Selesai & Siap Pakai</strong>
+            <small data-i18n="statusDoneDesc">Perbaikan tuntas, kondisi barang otomatis pulih "Baik"</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ITEM PICKER MODAL -->
+  <div id="itemPickerModal" class="app-modal sub-modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-container picker-sheet">
+      <div class="sheet-drag-handle"></div>
+      <button type="button" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+
+      <div class="modal-title-box">
+        <h3 id="pickerSheetTitle" data-i18n="pickAsset">Pilih Aset</h3>
+        <p id="pickerSheetSubtitle" data-i18n="pickAssetDesc">Sentuh barang inventaris yang ingin dipilih</p>
+      </div>
+
+      <div class="picker-list" id="pickerItemsList"></div>
+    </div>
+  </div>
+
+  <!-- QR & DETAIL MODAL -->
+  <div id="qrDetailModal" class="app-modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-container" style="max-width: 600px;">
+      <div class="sheet-drag-handle"></div>
+      <button type="button" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+
+      <div class="qr-detail-layout">
+        <div class="qr-code-box">
+          <div class="detail-item-photo-wrap" style="margin-bottom: 12px;">
+            <img id="detailItemPhotoImg" src="" alt="Foto Aset">
+          </div>
+          <div id="qrCanvasContainer"></div>
+          <strong id="qrDisplayCode">-</strong>
+          <small id="qrDisplayRoom">-</small>
+        </div>
+
+        <div class="qr-meta-box">
+          <span class="cond-pill" id="qrDisplayBadge">Baik</span>
+          <h3 id="qrDisplayName">-</h3>
+
+          <!-- Kalkulasi Depresiasi -->
+          <div style="background:#f8fafc; border:1px solid var(--border-color); border-radius:14px; padding:12px; margin-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:11px; color:var(--text-muted);" data-i18n="depTitle">Nilai Buku Saat Ini</span>
+              <span id="depreciationAgeBadge" style="font-size:10px; font-weight:700; color:var(--primary); background:#eff6ff; padding:2px 6px; border-radius:6px;">Usia: 0 bln</span>
+            </div>
+            <h4 id="depreciationCurrentValue" style="font-size:16px; font-weight:800; color:var(--primary); margin:4px 0;">Rp 0</h4>
+            <div style="height:6px; background:#e2e8f0; border-radius:6px; overflow:hidden; margin:6px 0;">
+              <div id="depreciationProgressBar" style="height:100%; width:100%; background:#10b981;"></div>
+            </div>
+            <small id="depreciationLostValue" style="font-size:10.5px; color:var(--text-muted);">Penyusutan: -Rp 0</small>
+          </div>
+
+          <div class="qr-info-list" id="qrInfoList"></div>
+
+          <div class="modal-footer-actions" style="margin-top: 14px;">
+            <button type="button" class="btn-outline-action btn-sm" id="btnDownloadQr">
+              <i class="fa-solid fa-download"></i> <span data-i18n="saveImage">Simpan Gambar</span>
+            </button>
+            <button type="button" class="btn-primary-action btn-sm" id="btnPrintQr">
+              <i class="fa-solid fa-print"></i> <span data-i18n="printLabel">Cetak Label</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPORT MODAL -->
+  <div id="exportReportModal" class="app-modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-container export-sheet">
+      <div class="sheet-drag-handle"></div>
+      <button type="button" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+
+      <div class="modal-title-box">
+        <h3 data-i18n="exportModalTitle">Ekspor Dokumen Laporan</h3>
+        <p>Pilih laporan inventaris resmi yang ingin diunduh atau dicetak</p>
+      </div>
+
+      <div class="export-options-grid">
+        <div class="export-card">
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div class="export-icon-wrap blue"><i class="fa-solid fa-book-bookmark"></i></div>
+            <div class="export-details">
+              <strong data-i18n="exportItemsTitle">Buku Induk Aset</strong>
+              <small data-i18n="exportItemsDesc">Daftar seluruh barang, nilai finansial, dan sebaran ruang</small>
+            </div>
+          </div>
+          <div class="export-btn-group">
+            <button type="button" class="btn-sm-action outline" onclick="printOfficialReport('items')">
+              <i class="fa-solid fa-print"></i> <span data-i18n="printPdf">Cetak / PDF</span>
+            </button>
+            <button type="button" class="btn-sm-action outline" onclick="exportDataToExcelStyled('items')">
+              <i class="fa-solid fa-file-excel"></i> Excel
+            </button>
+          </div>
+        </div>
+
+        <div class="export-card">
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div class="export-icon-wrap purple"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+            <div class="export-details">
+              <strong data-i18n="exportMutationsTitle">Laporan Mutasi Ruangan</strong>
+              <small data-i18n="exportMutationsDesc">Catatan historis perpindahan unit beserta petugas & waktu</small>
+            </div>
+          </div>
+          <div class="export-btn-group">
+            <button type="button" class="btn-sm-action outline" onclick="printOfficialReport('mutations')">
+              <i class="fa-solid fa-print"></i> <span data-i18n="printPdf">Cetak / PDF</span>
+            </button>
+            <button type="button" class="btn-sm-action outline" onclick="exportDataToExcelStyled('mutations')">
+              <i class="fa-solid fa-file-excel"></i> Excel
+            </button>
+          </div>
+        </div>
+
+        <div class="export-card">
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div class="export-icon-wrap green"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+            <div class="export-details">
+              <strong data-i18n="exportServicesTitle">Rekap Servis & Biaya</strong>
+              <small data-i18n="exportServicesDesc">Daftar perbaikan teknisi, suku cadang, & pengeluaran</small>
+            </div>
+          </div>
+          <div class="export-btn-group">
+            <button type="button" class="btn-sm-action outline" onclick="printOfficialReport('services')">
+              <i class="fa-solid fa-print"></i> <span data-i18n="printPdf">Cetak / PDF</span>
+            </button>
+            <button type="button" class="btn-sm-action outline" onclick="exportDataToExcelStyled('services')">
+              <i class="fa-solid fa-file-excel"></i> Excel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUDIT LOGS MODAL -->
+  <div id="auditLogsModal" class="app-modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-container audit-sheet">
+      <div class="sheet-drag-handle"></div>
+      <button type="button" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+
+      <div class="modal-title-box">
+        <h3 data-i18n="auditModalTitle">Riwayat Aktivitas Sistem</h3>
+        <p data-i18n="auditModalDesc">Catatan kronologis tindakan operasional dan perubahan data aset</p>
+      </div>
+
+      <div class="search-input-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="inputSearchLogs" placeholder="Cari nama staf, aksi, atau kode aset..." data-i18n-ph="searchLogsPh">
+      </div>
+
+      <div class="audit-feed-full" id="auditFeedFullList"></div>
+    </div>
+  </div>
+
+  <!-- DELETE CONFIRM MODAL -->
+  <div id="deleteConfirmModal" class="app-modal sub-modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-container delete-sheet" style="max-width: 400px;">
+      <div class="delete-icon-wrap"><i class="fa-solid fa-trash-can"></i></div>
+      <h3 data-i18n="deleteItemTitle">Hapus Data Aset?</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin: 6px 0 16px;">
+        <span data-i18n="deleteItemDesc">Aset</span> <strong id="delItemName">Barang</strong> (<span id="delItemCode">-</span>) <span data-i18n="deleteItemTail">akan dihapus dari daftar aktif.</span>
+      </p>
+      <div class="modal-footer-actions">
+        <button type="button" class="btn-outline-action" id="btnCancelDelete" data-i18n="cancel">Batal</button>
+        <button type="button" class="btn-danger-action" id="btnExecuteDelete" data-i18n="confirmDelete">Ya, Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESET CONFIRM MODAL -->
+  <div id="resetConfirmModal" class="app-modal sub-modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-container delete-sheet" style="max-width: 440px;">
+      <div class="delete-icon-wrap" style="background:#fee2e2; color:#dc2626;"><i class="fa-solid fa-rotate-left"></i></div>
+      <h3 data-i18n="resetConfirmTitle">Reset Database Sistem?</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin: 6px 0 14px;" data-i18n="resetConfirmDesc">
+        Tindakan ini akan mengembalikan data ke kondisi awal pabrik NusaTech.
+      </p>
+      <ul style="text-align:left; font-size:12px; color:var(--text-muted); padding-left:18px; margin-bottom:18px; line-height:1.6;">
+        <li data-i18n="resetBullet1">Seluruh data aset kustom akan dihapus.</li>
+        <li data-i18n="resetBullet2">Histori mutasi dan catatan servis dikosongkan.</li>
+        <li data-i18n="resetBullet3">Log audit aktivitas sistem dibersihkan.</li>
+        <li data-i18n="resetBullet4">Akun & sesi login Anda tetap aman.</li>
+      </ul>
+      <div class="modal-footer-actions">
+        <button type="button" class="btn-outline-action" id="btnCancelReset" data-i18n="cancel">Batal</button>
+        <button type="button" class="btn-danger-action" id="btnExecuteReset" data-i18n="confirmReset">Ya, Reset Sekarang</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGOUT CONFIRM MODAL -->
+  <div id="logoutConfirmModal" class="app-modal sub-modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-container delete-sheet" style="max-width: 380px;">
+      <div class="delete-icon-wrap" style="background:#fef3c7; color:#d97706;"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
+      <h3 data-i18n="logoutConfirmTitle">Keluar dari Sesi?</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin: 6px 0 16px;" data-i18n="logoutConfirmDesc">
+        Anda harus masuk kembali untuk mengelola aset inventaris.
+      </p>
+      <div class="modal-footer-actions">
+        <button type="button" class="btn-outline-action" id="btnCancelLogout" data-i18n="cancel">Batal</button>
+        <button type="button" class="btn-danger-action" id="btnExecuteLogout" data-i18n="logout">Keluar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT PROFILE MODAL -->
+  <div id="editProfileModal" class="app-modal sub-modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-container edit-profile-sheet">
+      <div class="sheet-drag-handle"></div>
+      <button type="button" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+
+      <div class="modal-title-box">
+        <h3 data-i18n="updateProfileTitle">Perbarui Profil Pengguna</h3>
+        <p data-i18n="updateProfileDesc">Sesuaikan nama identitas dan peran tim Axentra</p>
+      </div>
+
+      <form id="formEditProfile">
+        <div class="form-group">
+          <label for="inputEditProfileName" data-i18n="userNameLabel">Nama Pengguna / Staf *</label>
+          <input type="text" id="inputEditProfileName" required>
+        </div>
+        <div class="form-group">
+          <label for="inputEditProfileRole" data-i18n="roleLabel">Peran / Posisi *</label>
+          <input type="text" id="inputEditProfileRole" required>
+        </div>
+        <div class="modal-footer-actions" style="margin-top: 14px;">
+          <button type="button" class="btn-outline-action" id="btnCancelEditProfile" data-i18n="cancel">Batal</button>
+          <button type="submit" class="btn-primary-action" data-i18n="save">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- AVATAR ACTIONS MODAL -->
+  <div id="avatarActionsModal" class="app-modal sub-modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-container avatar-actions-sheet">
+      <div class="sheet-drag-handle"></div>
+      <button type="button" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+
+      <div class="modal-title-box">
+        <h3 data-i18n="manageAvatarTitle">Kelola Foto Profil</h3>
+        <p data-i18n="manageAvatarDesc">Pilih tindakan untuk foto akun Anda</p>
+      </div>
+
+      <div class="avatar-action-options">
+        <label class="avatar-opt-btn">
+          <i class="fa-solid fa-camera"></i>
+          <div>
+            <strong data-i18n="takePhoto">Ambil Foto</strong>
+            <small data-i18n="cameraSelfieDesc">Gunakan kamera ponsel untuk jepret langsung</small>
+          </div>
+          <input type="file" id="inputUploadAvatarCamera" accept="image/*" capture="user" style="display:none;">
+        </label>
+
+        <label class="avatar-opt-btn">
+          <i class="fa-solid fa-image"></i>
+          <div>
+            <strong data-i18n="fromGallery">Dari Galeri</strong>
+            <small data-i18n="galleryDesc">Gunakan foto yang tersimpan di perangkat</small>
+          </div>
+          <input type="file" id="inputUploadAvatarGallery" accept="image/*" style="display:none;">
+        </label>
+
+        <button type="button" class="avatar-opt-btn danger-opt" id="btnDeleteAvatarPhoto">
+          <i class="fa-solid fa-trash-can"></i>
+          <div>
+            <strong data-i18n="deleteAvatar">Hapus Foto Profil</strong>
+            <small data-i18n="deleteAvatarDesc">Kembalikan tampilan avatar ke inisial huruf</small>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FULLSCREEN SCANNER -->
+  <div id="fullscreenScanner" class="fullscreen-scanner hidden">
+    <div class="scanner-topbar">
+      <span><i class="fa-solid fa-qrcode" style="margin-right: 6px;"></i> <span data-i18n="scanTitle">Pindai QR / Barcode</span></span>
+      <button type="button" class="scanner-circle-btn" id="btnExitScanner">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="scanner-camera-viewport" id="qrReaderViewport"></div>
+
+    <div class="scanner-overlay-frame">
+      <div class="scanner-aim-box">
+        <div class="scanner-laser-line"></div>
+      </div>
+      <p class="scanner-instruction-text" data-i18n="scanInstruction">Posisikan kode QR barang di dalam kotak</p>
+    </div>
+  </div>
+
+  <!-- FLOATING BAR AKSI MASSAL -->
+  <div id="batchFloatingBar" class="batch-floating-bar">
+    <div class="batch-count-badge">
+      <i class="fa-solid fa-check-circle" style="color: #38bdf8;"></i>
+      <span id="batchSelectedCount">0 dipilih</span>
+    </div>
+    <div class="batch-btn-group">
+      <button type="button" class="btn-batch-action" id="btnBatchMoveTrigger">
+        <i class="fa-solid fa-arrow-right-arrow-left"></i> Pindah Ruangan
+      </button>
+      <button type="button" class="btn-batch-action danger" id="btnBatchDeleteTrigger">
+        <i class="fa-solid fa-trash-can"></i> Hapus
+      </button>
+    </div>
+    <button type="button" class="btn-batch-close" id="btnBatchClose" title="Batal Pilih">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <!-- MODAL: PINDAH RUANGAN MASSAL DENGAN TTD RESMI -->
+  <div id="batchMoveModal" class="app-modal sub-modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-container scrollable-sheet" style="max-width: 440px;">
+      <div class="sheet-drag-handle"></div>
+      <button type="button" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+
+      <div class="modal-title-box">
+        <h3>Mutasi Aset Massal</h3>
+        <p id="lblBatchMoveSub">Pindahkan seluruh aset terpilih ke ruangan baru</p>
+      </div>
+
+      <form id="formBatchMove">
+        <div class="form-group">
+          <label for="inputBatchDestRoom">Ruangan Tujuan Baru *</label>
+          <input type="text" id="inputBatchDestRoom" placeholder="Contoh: Meeting Room Utama" required>
+        </div>
+
+        <div class="form-group">
+          <label for="inputBatchMoveNotes">Keterangan / Alasan Mutasi</label>
+          <textarea id="inputBatchMoveNotes" rows="2" placeholder="Contoh: Penataan fasilitas ruangan baru..."></textarea>
+        </div>
+
+        <!-- Kanvas TTD untuk Mutasi Massal -->
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-main); margin-bottom: 0;">
+              <i class="fa-solid fa-signature" style="color: var(--primary); margin-right: 4px;"></i>
+              Tanda Tangan Penerima / Petugas *
+            </label>
+            <button type="button" id="btnClearBatchSignature" class="btn-text" style="font-size: 11px; color: #ef4444; padding: 0; background: none; border: none; font-weight: 700; cursor: pointer;">
+              <i class="fa-solid fa-rotate-left"></i> Ulangi
+            </button>
+          </div>
+          <div style="border: 1.5px dashed var(--border-color); border-radius: 12px; background: #ffffff; overflow: hidden; position: relative;">
+            <canvas id="batchSignatureCanvas" style="width: 100%; height: 110px; display: block; touch-action: none; cursor: crosshair;"></canvas>
+            <span id="batchSignatureHint" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 11px; color: var(--text-muted); pointer-events: none; opacity: 0.6;">
+              Goreskan tanda tangan di sini
+            </span>
+          </div>
+          <input type="hidden" id="inputBatchSignatureBase64">
+        </div>
+
+        <div class="modal-footer-actions">
+          <button type="button" class="btn-outline-action" id="btnCancelBatchMove">Batal</button>
+          <button type="submit" class="btn-primary-action">Proses Mutasi Massal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toastMessage" class="toast-message"></div>
+
+  <!-- EXTERNAL SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <!-- APP SCRIPT ENGINE -->
+  <script src="script.js"></script>
+</body>
+</html>
